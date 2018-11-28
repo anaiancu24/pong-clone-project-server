@@ -1,7 +1,7 @@
 import { BaseEntity, PrimaryGeneratedColumn, Column, Entity, Index, OneToMany, ManyToOne } from 'typeorm'
 import User from '../users/entity'
 
-export type Symbol = 'x' | 'o'
+export type Symbol = 1 | 2
 
 type Status = 'pending' | 'started' | 'finished'
 
@@ -12,17 +12,12 @@ export class Game extends BaseEntity {
   @PrimaryGeneratedColumn()
   id?: number
 
-  @Column('char', { length: 1, nullable: true })
-  winner: Symbol
-
-  @Column('number', { nullable: true })
-  score: number
+  /* @Column('char', { length: 1, nullable: true })
+  winner: Symbol */
 
   @Column('text', { default: 'pending' })
   status: Status
 
-  // this is a relation, read more about them here:
-  // http://typeorm.io/#/many-to-one-one-to-many-relations
   @OneToMany(_ => Player, player => player.game, { eager: true })
   players: Player[]
 }
@@ -42,4 +37,7 @@ export class Player extends BaseEntity {
 
   @Column('char', { length: 1 })
   symbol: Symbol
+
+  @Column('number')
+  score: number
 }
