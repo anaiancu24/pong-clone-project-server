@@ -12,9 +12,6 @@ export class Game extends BaseEntity {
   @PrimaryGeneratedColumn()
   id?: number
 
-  /* @Column('char', { length: 1, nullable: true })
-  winner: Symbol */
-
   @Column('text', { default: 'pending' })
   status: Status
 
@@ -32,12 +29,15 @@ export class Player extends BaseEntity {
   @ManyToOne(_ => User, user => user.players)
   user: User
 
+  @Column()
+  userId: number
+
   @ManyToOne(_ => Game, game => game.players)
   game: Game
 
   @Column('char', { length: 1 })
   symbol: Symbol
 
-  @Column('number')
+  @Column('integer', { default: 0 })
   score: number
 }
