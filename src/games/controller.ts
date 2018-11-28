@@ -1,5 +1,5 @@
 import { 
-  JsonController, Authorized, CurrentUser, Post, Param, BadRequestError, HttpCode, Get, 
+  JsonController, Authorized, CurrentUser, Post, Param, BadRequestError, HttpCode, Get, Patch, NotFoundError, ForbiddenError, Body
 } from 'routing-controllers'
 import User from '../users/entity'
 import { Game, Player } from './entities'
@@ -65,7 +65,7 @@ export default class GameController {
     return player
   }
 
- /*  @Authorized()
+ @Authorized()
   // the reason that we're using patch here is because this request is not idempotent
   // http://restcookbook.com/HTTP%20Methods/idempotency/
   // try to fire the same requests twice, see what happens
@@ -73,7 +73,7 @@ export default class GameController {
   async updateGame(
     @CurrentUser() user: User,
     @Param('id') gameId: number,
-   // @Body() update: GameUpdate
+    @Body() update: Game
   ) {
     const game = await Game.findOneById(gameId)
     if (!game) throw new NotFoundError(`Game does not exist`)
@@ -82,23 +82,22 @@ export default class GameController {
     if (game.status !== 'started') throw new BadRequestError(`The game is not started yet`)  
 
     //const winner = calculateWinner(update.score)
-   /*  if (winner) {
+    /* if (winner) {
       game.winner = winner
       game.status = 'finished'
     }
     else if (finished(update.score)) {
       game.status = 'finished'
-    }
-    game.score = update.score
+    } */
+    game.coordinates = update.coordinates
     await game.save()
     
     io.emit('action', {
       type: 'UPDATE_GAME',
       payload: game
     })
-
     return game
-  } */
+  }
 
   @Authorized()
   @Get('/games/:id([0-9]+)')

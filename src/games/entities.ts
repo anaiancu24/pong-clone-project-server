@@ -1,10 +1,24 @@
 import { BaseEntity, PrimaryGeneratedColumn, Column, Entity, Index, OneToMany, ManyToOne } from 'typeorm'
 import User from '../users/entity'
+import { coordinates } from './initialCoordinates';
 
 export type Symbol = 1 | 2
 
 type Status = 'pending' | 'started' | 'finished'
 
+type Coordinates =  {
+  width: number,
+  height: number,
+  fps: number,
+  ballY: number,
+  ballX:number,
+  ballRadius: number,
+  ballSpeedY: number,
+  ballSpeedX: number,
+  paddle1Y: number,
+  paddle2Y: number,
+  paddleSpeed: number
+}
 
 @Entity()
 export class Game extends BaseEntity {
@@ -14,6 +28,9 @@ export class Game extends BaseEntity {
 
   @Column('text', { default: 'pending' })
   status: Status
+
+  @Column('json', { default: coordinates})
+  coordinates: Coordinates
 
   @OneToMany(_ => Player, player => player.game, { eager: true })
   players: Player[]
