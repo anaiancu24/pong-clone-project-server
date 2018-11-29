@@ -78,14 +78,9 @@ export default class GameController {
     } else if (type === "UPDATE_PADDLE_2") {
       game.coordinates.paddle2Y=position;
     }
-    // switch(type) {
-    //   case 'UPDATE_PADDLE_1': game.coordinates.paddle1Y=position;
-    //   case 'UPDATE_PADDLE_2': game.coordinates.paddle2Y=position;
-    //   default: game
-    // }
+   
        await game.save()
        console.log(game)
-
 
     io.emit('action', {
       type: 'UPDATE_GAME',
@@ -93,7 +88,7 @@ export default class GameController {
       
     })
     
-    
+ 
     return game
 
   }
