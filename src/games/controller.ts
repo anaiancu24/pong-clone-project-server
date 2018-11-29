@@ -73,6 +73,8 @@ export default class GameController {
     if (game.status !== 'started') throw new BadRequestError(`The game is not started yet`)
 
     game.coordinates = update.coordinates
+
+    
     await game.save()
 
     io.emit('action', {
