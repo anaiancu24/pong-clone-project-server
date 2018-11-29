@@ -1,6 +1,5 @@
 import {
-  JsonController, Authorized, CurrentUser, Post, Param, BadRequestError, HttpCode, Get, Patch, NotFoundError, ForbiddenError, Body, ActionMetadata
-} from 'routing-controllers'
+  JsonController, Authorized, CurrentUser, Post, Param, BadRequestError, HttpCode, Get, Patch, NotFoundError, ForbiddenError, Body} from 'routing-controllers'
 import User from '../users/entity'
 import { Game, Player, Updated } from './entities'
 
@@ -73,21 +72,29 @@ export default class GameController {
     if (game.status !== 'started') throw new BadRequestError(`The game is not started yet`)
 
     const { type, position } = update
-
-    switch(type) {
-      case 'UPDATE_PADDLE_1': game.coordinates.paddle1Y=position;
-      case 'UPDATE_PADDLE_2': game.coordinates.paddle2Y=position
-      default: game
+    
+    if (type === "UPDATE_PADDLE_1") {
+      game.coordinates.paddle1Y=position;
+    } else if (type === "UPDATE_PADDLE_2") {
+      game.coordinates.paddle2Y=position;
     }
+    // switch(type) {
+    //   case 'UPDATE_PADDLE_1': game.coordinates.paddle1Y=position;
+    //   case 'UPDATE_PADDLE_2': game.coordinates.paddle2Y=position;
+    //   default: game
+    // }
        await game.save()
+       console.log(game)
+
 
     io.emit('action', {
       type: 'UPDATE_GAME',
       payload: game
       
     })
+    
+    
     return game
-
 
   }
 
