@@ -1,16 +1,10 @@
-import { 
+import {
   JsonController, Authorized, CurrentUser, Post, Param, BadRequestError, HttpCode, Get, Patch, NotFoundError, ForbiddenError, Body
 } from 'routing-controllers'
 import User from '../users/entity'
 import { Game, Player } from './entities'
- //import {IsBoard, calculateWinner, finished} from './logic'
 
-import {io} from '../index'
-
-/* class GameUpdate {
-
-  
-} */
+import { io } from '../index'
 
 @JsonController()
 export default class GameController {
@@ -24,7 +18,7 @@ export default class GameController {
     const entity = await Game.create().save()
 
     await Player.create({
-      game: entity, 
+      game: entity,
       user,
       symbol: 1,
     }).save()
@@ -53,7 +47,7 @@ export default class GameController {
     await game.save()
 
     const player = await Player.create({
-      game, 
+      game,
       user,
       symbol: 2
     }).save()
@@ -65,10 +59,7 @@ export default class GameController {
     return player
   }
 
- @Authorized()
-  // the reason that we're using patch here is because this request is not idempotent
-  // http://restcookbook.com/HTTP%20Methods/idempotency/
-  // try to fire the same requests twice, see what happens
+  @Authorized()
   @Patch('/games/:id([0-9]+)')
   async updateGame(
     @CurrentUser() user: User,
@@ -79,19 +70,11 @@ export default class GameController {
     if (!game) throw new NotFoundError(`Game does not exist`)
     const player = await Player.findOne({ user, game })
     if (!player) throw new ForbiddenError(`You are not part of this game`)
-    if (game.status !== 'started') throw new BadRequestError(`The game is not started yet`)  
+    if (game.status !== 'started') throw new BadRequestError(`The game is not started yet`)
 
-    //const winner = calculateWinner(update.score)
-    /* if (winner) {
-      game.winner = winner
-      game.status = 'finished'
-    }
-    else if (finished(update.score)) {
-      game.status = 'finished'
-    } */
     game.coordinates = update.coordinates
     await game.save()
-    
+
     io.emit('action', {
       type: 'UPDATE_GAME',
       payload: game
