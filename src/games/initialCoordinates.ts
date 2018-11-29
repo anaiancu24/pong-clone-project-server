@@ -1,28 +1,22 @@
-import { Game } from './entities'
-import { io } from '../index'
+/* import { Game } from './entities'
+import { io } from '../index' */
 
 const Width = 1100
 const Height = 800
 const paddleWidth = 100
-
-const ballY = Height / 2
-const ballX = Width / 2
-const ballSpeedY = 0
-const ballSpeedX = Height / 75
-
 const paddle1YInitial = Height / 2 - (paddleWidth / 2)
 const paddle2YInitial = Height / 2 - (paddleWidth / 2)
 
 export const coordinates = {
-  ballY: ballY,
-  ballX: ballX,
-  ballSpeedY: ballSpeedY,
-  ballSpeedX: ballSpeedX,
+  ballY: Height / 2,
+  ballX: Width / 2,
+  ballSpeedY: 0,
+  ballSpeedX: Height / 75,
   paddle1Y: paddle1YInitial,
   paddle2Y: paddle2YInitial,
 }
 
-export const startBallLoop = (gameId) => {
+/* export const startBallLoop = (gameId) => {
   setInterval(() => {
     ballLoop(gameId)
   }, 1000)
@@ -50,7 +44,7 @@ const ballLoop = async (gameId) => {
 
   if (newBallX > Width || newBallX < 0) {
 
-    if (newBallX > Width / 2 && (newBallY <= paddle2Y && newBallY <= paddle2Y + paddleWidth)) {
+    if (newBallX > Width / 2 && (newBallY >= paddle2Y && newBallY <= paddle2Y + paddleWidth)) {
       newBallSpeedX = -ballSpeedX
 
       let deltaY = newBallY - (paddle2Y + paddleWidth / 2);
@@ -63,20 +57,22 @@ const ballLoop = async (gameId) => {
       newBallSpeedY = deltaY * 0.35;
     }
     else {
-      if (newBallX < Width / 2) {
+      if (newBallX > Width / 2) {
         newScore2 = score2 + 1
       } else {
         newScore1 = score1 + 1
       }
       newBallY = Height / 2;
       newBallX = Width / 2;
-      newBallSpeedX = -ballSpeedX;
+      newBallSpeedX = 10;
       newBallSpeedY = 0;
     }
   }
+
   if (newBallY > Height || newBallY < 0) {
     newBallSpeedY = -ballSpeedY;
   }
+
   game!.coordinates.ballX = newBallX
   game!.coordinates.ballY = newBallY
   game!.coordinates.ballSpeedX = newBallSpeedX
@@ -98,7 +94,7 @@ const ballLoop = async (gameId) => {
 
 
 
-
+ */
 
 
 /* 

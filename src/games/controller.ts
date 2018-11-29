@@ -5,7 +5,6 @@ import User from '../users/entity'
 import { Game, Player, Updated } from './entities'
 
 import { io } from '../index'
-import { startBallLoop } from './initialCoordinates';
 
 @JsonController()
 export default class GameController {
@@ -47,8 +46,6 @@ export default class GameController {
     game.status = 'started'
     await game.save()
 
-    startBallLoop(gameId)
-
     const player = await Player.create({
       game,
       user,
@@ -87,7 +84,6 @@ export default class GameController {
     }
 
     await game.save()
-    console.log(game)
 
     io.emit('action', {
       type: 'UPDATE_GAME',
