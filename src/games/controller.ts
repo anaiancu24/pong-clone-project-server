@@ -1,8 +1,8 @@
 import {
-  JsonController, Authorized, CurrentUser, Post, Param, BadRequestError, HttpCode, Get, Patch, NotFoundError, ForbiddenError, Body
+  JsonController, Authorized, CurrentUser, Post, Param, BadRequestError, HttpCode, Get, Patch, NotFoundError, ForbiddenError, Body, ActionMetadata
 } from 'routing-controllers'
 import User from '../users/entity'
-import { Game, Player } from './entities'
+import { Game, Player, Updated } from './entities'
 
 import { io } from '../index'
 
@@ -64,7 +64,7 @@ export default class GameController {
   async updateGame(
     @CurrentUser() user: User,
     @Param('id') gameId: number,
-    @Body() update: Game
+    @Body() update: Updated
   ) {
     const game = await Game.findOneById(gameId)
     if (!game) throw new NotFoundError(`Game does not exist`)
@@ -72,14 +72,23 @@ export default class GameController {
     if (!player) throw new ForbiddenError(`You are not part of this game`)
     if (game.status !== 'started') throw new BadRequestError(`The game is not started yet`)
 
-    game.coordinates = update.coordinates
-    await game.save()
+    const { type, position } = update
+
+    switch(type) {
+      case 'UPDATE_PADDLE_1': game.coordinates.paddle1Y=position;
+      case 'UPDATE_PADDLE_2': game.coordinates.paddle2Y=position
+      default: game
+    }
+       await game.save()
 
     io.emit('action', {
       type: 'UPDATE_GAME',
       payload: game
+      
     })
     return game
+
+
   }
 
   @Authorized()

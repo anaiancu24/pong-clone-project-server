@@ -6,6 +6,10 @@ export type Symbol = 1 | 2
 
 type Status = 'pending' | 'started' | 'finished'
 
+export type Updated = {
+  type: string,
+  position: number
+}
 type Coordinates = {
   ballY: number,
   ballX: number,
