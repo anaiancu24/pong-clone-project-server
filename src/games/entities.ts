@@ -6,13 +6,9 @@ export type Symbol = 1 | 2
 
 type Status = 'pending' | 'started' | 'finished'
 
-type Coordinates =  {
-  width: number,
-  height: number,
-  fps: number,
+type Coordinates = {
   ballY: number,
-  ballX:number,
-  ballRadius: number,
+  ballX: number,
   ballSpeedY: number,
   ballSpeedX: number,
   paddle1Y: number,
@@ -29,7 +25,10 @@ export class Game extends BaseEntity {
   @Column('text', { default: 'pending' })
   status: Status
 
-  @Column('json', { default: coordinates})
+  @Column('text', { default: null })
+  winner: string
+
+  @Column('json', { default: coordinates })
   coordinates: Coordinates
 
   @OneToMany(_ => Player, player => player.game, { eager: true })
