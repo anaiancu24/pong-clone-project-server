@@ -50,8 +50,8 @@ export class Player extends BaseEntity {
   @ManyToOne(_ => User, user => user.players)
   user: User
 
-  @Column()
-  userId: number
+  /* @Column()
+  userId: number */
 
   @ManyToOne(_ => Game, game => game.players)
   game: Game
