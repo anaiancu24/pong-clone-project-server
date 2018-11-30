@@ -67,7 +67,7 @@ export default class GameController {
   async updateGame(
     @CurrentUser() user: User,
     @Param('id') gameId: number,
-    @Body() update: Updated
+    @Body() update: Partial<Updated>
   ) {
     const game = await Game.findOneById(gameId)
     if (!game) throw new NotFoundError(`Game does not exist`)
@@ -75,12 +75,16 @@ export default class GameController {
     if (!player) throw new ForbiddenError(`You are not part of this game`)
     if (game.status !== 'started') throw new BadRequestError(`The game is not started yet`)
 
-    const { type, position } = update
+    const { type, position, newScore } = update
 
     if (type === "UPDATE_PADDLE_1") {
-      game.coordinates.paddle1Y = position;
+      game.coordinates.paddle1Y = position!;
     } else if (type === "UPDATE_PADDLE_2") {
-      game.coordinates.paddle2Y = position;
+      game.coordinates.paddle2Y = position!;
+    } else if (type === "SCORE_PLAYER1") {
+      game.players[0].score = newScore!
+    } else if (type === "SCORE_PLAYER2") {
+      game.players[1].score = newScore!
     }
 
     await game.save()

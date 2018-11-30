@@ -8,7 +8,8 @@ type Status = 'pending' | 'started' | 'finished'
 
 export type Updated = {
   type: string,
-  position: number
+  position: number,
+  newScore: number
 }
 type Coordinates = {
   ballY: number,
