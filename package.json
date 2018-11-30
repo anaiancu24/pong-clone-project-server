@@ -1,6 +1,9 @@
 {
   "name": "game-starter-b15-server",
   "version": "1.0.0",
+  "engines": {
+    "node": "8.12"
+  },
   "main": "target/index.js",
   "private": false,
   "scripts": {
@@ -10,9 +13,6 @@
     "compile": "node_modules/.bin/tsc -p .",
     "postinstall": "tsc -p ."
   },
-  "engines": { 
-    "node": "8.12" 
- },
   "dependencies": {
     "@types/bcrypt": "^1.0.0",
     "@types/jsonwebtoken": "^7.2.6",
