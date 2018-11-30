@@ -5,6 +5,7 @@ import User from '../users/entity'
 import { Game, Player, Updated } from './entities'
 
 import { io } from '../index'
+//import { coordinates } from './initialCoordinates';
 
 @JsonController()
 export default class GameController {
@@ -78,23 +79,34 @@ export default class GameController {
     const { type, position, newScore } = update
 
     if (type === "UPDATE_PADDLE_1") {
-      game.coordinates.paddle1Y = position!;
+      await Game.updateById(game.id, { coordinates: { ...game.coordinates, paddle1Y: position }})
     } else if (type === "UPDATE_PADDLE_2") {
-      game.coordinates.paddle2Y = position!;
+      await Game.updateById(game.id, { coordinates: { ...game.coordinates, paddle2Y: position }})
     } else if (type === "SCORE_PLAYER1") {
-      game.players[0].score = newScore!
+      if (newScore! < 8) {
+        await Player.updateById(game.players[0].id, { score: newScore })
+      }
     } else if (type === "SCORE_PLAYER2") {
-      game.players[1].score = newScore!
+      if (newScore! < 8) {
+        await Player.updateById(game.players[1].id, { score: newScore })
+      }
     }
 
-    await game.save()
+    const updatedGame = await Game.findOneById(gameId)
+
+    if (updatedGame!.players[0].score === 7) {
+      updatedGame!.winner = 'Player 1 won'
+
+    } else if (updatedGame!.players[1].score === 7) {
+      updatedGame!.winner = 'Player 2 won'
+    }
 
     io.emit('action', {
       type: 'UPDATE_GAME',
-      payload: game
+      payload: updatedGame
 
     })
-    return game
+    return updatedGame
 
   }
 
