@@ -21,7 +21,7 @@
     "rootDir": "src/"
   },
   "include": [
-      "src/**/*"
+      "src/**/*", "../pong-client/src/components/games/GameDetails.js", "../pong-client/src/components/games/Pong/GameDetails.js"
   ],
   "exclude": [
       "node_modules",
